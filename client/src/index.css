@@ -343,6 +343,7 @@ input {
 }
 
 .error{
+  margin-bottom: 0px !important;
     color: #090909;
     text-align: center;
     padding: 20px;
@@ -357,4 +358,8 @@ input {
     padding: 20px;
     background: #D9FFE5;
 
+}
+
+.urgency-bar{
+  margin-left: 10px;
 }

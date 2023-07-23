@@ -7,6 +7,7 @@ import { postData, updateData } from "../services/tasksApi";
 
 function Modal({ setIsModalOpen, mode, task, fetchTasks }) {
   const { user } = useContext(AuthContext);
+  const [errorMessage, setErrorMessage] = useState(null);
   const isEdit = mode === "edit";
   
   const [data, setData] = useState({
@@ -27,6 +28,11 @@ function Modal({ setIsModalOpen, mode, task, fetchTasks }) {
   const addTask = async (e) => {
     e.preventDefault();
 
+    if (data.title.trim() === "") {
+      setErrorMessage("Please Enter a Task Title");
+      return;
+    }
+
     try {
       await postData(data).then((res) => {
         setIsModalOpen(false)
@@ -39,6 +45,11 @@ function Modal({ setIsModalOpen, mode, task, fetchTasks }) {
 
   const editTask = async (e) => {
     e.preventDefault();
+
+    if (data.title.trim() === "") {
+      setErrorMessage("Please Enter a Task Title");
+      return;
+    }
 
     try {
       await updateData(task.id, data).then((res) => {
@@ -58,13 +69,13 @@ function Modal({ setIsModalOpen, mode, task, fetchTasks }) {
           <XMarkIcon className="cross-icon" onClick={() => setIsModalOpen(false)} />
         </div>
         <form>
-          <label className="label">Title</label>
+          <label className="label mt-3">Title</label>
           <input 
             required
             name="title"
             id="title"
             type="text" 
-            placeholder="Please enter your task title"
+            placeholder="Please Enter Your Task Title"
             value={data.title}
             onChange={handleChange}
           />
@@ -81,9 +92,10 @@ function Modal({ setIsModalOpen, mode, task, fetchTasks }) {
           />
           <input 
             type="submit" 
-            className="submit mt-3" 
+            className="submit mt-2" 
             onClick={isEdit ? editTask : addTask} 
             value={isEdit ? "Save Task" : "Add Task"}/>
+            {errorMessage && <p className="error">{errorMessage}</p>}
         </form>
       </div>
     </div>
